@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DP Mods Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=SF+Pro+Display:wght@600&amp;display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+            color: white;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .main-screen {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 50px 24px 40px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 42px;
+        }
+        
+        .logo {
+            width: 140px;
+            height: 140px;
+            background: #1C1C1E;
+            border-radius: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #2C2C2E;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.55);
+        }
+        
+        .logo-inner {
+            width: 92px;
+            height: 92px;
+            background: linear-gradient(135deg, #0A84FF, #007AFF);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-inner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.22), transparent);
+            border-radius: 24px;
+        }
+        
+        .terminal-icon {
+            font-size: 42px;
+            color: white;
+            z-index: 2;
+        }
+        
+        .title {
+            font-size: 25px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            letter-spacing: -0.6px;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #8E8E93;
+            text-align: center;
+            margin-bottom: 42px;
+        }
+        
+        .input-wrapper {
+            margin-bottom: 10px;
+        }
+        
+        input {
+            width: 100%;
+            background: #1C1C1E;
+            border: 2px solid #2C2C2E;
+            color: white;
+            font-size: 15px;
+            padding: 17px 22px;
+            border-radius: 22px;
+            outline: none;
+            box-sizing: border-box;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        input:focus {
+            border-color: #0A84FF;
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
+        }
+        
+        input::placeholder {
+            color: #48484A;
+        }
+        
+        .demo-hint {
+            text-align: center;
+            font-size: 11px;
+            color: #48484A;
+            margin: 10px 0 26px;
+        }
+        
+        .btn {
+            width: 100%;
+            background: #0A84FF;
+            color: white;
+            border: none;
+            padding: 17px 0;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 22px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 12px rgba(10, 132, 255, 0.35);
+        }
+        
+        .btn:active {
+            background: #007AFF;
+            transform: scale(0.985);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 95px;
+        }
+        
+        .footer-text {
+            font-size: 11px;
+            color: #48484A;
+        }
+        
+        .security {
+            font-size: 10px;
+            color: #3A3A3C;
+            margin-top: 3px;
+        }
+
+        /* ========== DIALOG MODAL ========== */
+        #dialogOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.82);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+        
+        .dialog-card {
+            background: #1C1C1E;
+            border-radius: 24px;
+            padding: 28px 26px 24px;
+            max-width: 320px;
+            width: 100%;
+            border: 1px solid #2C2C2E;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+        }
+        
+        .dialog-icon {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        
+        .dialog-title {
+            color: #FFFFFF;
+            font-size: 19px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 11px;
+            letter-spacing: -0.3px;
+        }
+        
+        .dialog-message {
+            color: #8E8E93;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.45;
+            margin-bottom: 24px;
+            padding: 0 6px;
+        }
+        
+        .dialog-btn {
+            background: #0A84FF;
+            color: #FFFFFF;
+            border: none;
+            width: 100%;
+            padding: 15px 0;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 18px;
+            cursor: pointer;
+        }
+        
+        .dialog-btn:active {
+            background: #007AFF;
+        }
+    </style>
+</head>
+<body>
+    <!-- MAIN LOGIN SCREEN -->
+    <div class="main-screen">
+        <!-- LOGO (kecil) -->
+        <div class="logo-wrapper">
+            <div class="logo">
+                <div class="logo-inner">
+                    <span class="terminal-icon">⌘</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="title">DP Mods Terminal</div>
+        <div class="subtitle">Enter your reseller key to authenticate</div>
+
+        <div class="input-wrapper">
+            <input id="keyInput" type="text" placeholder="Reseller Key (e.g. DP-XXXXX)">
+        </div>
+
+        <div class="demo-hint">Demo: MAINTENANCE • UPDATE • BANNED</div>
+
+        <button class="btn" onclick="authenticate()">
+            Authenticate Terminal
+        </button>
+
+        <div class="footer">
+            <div class="footer-text">Secured by DP_Security API V2</div>
+            <div class="security">End-to-end encrypted • Hardware verified</div>
+        </div>
+    </div>
+
+    <!-- DIALOG MODAL (Premium iOS Black) -->
+    <div id="dialogOverlay">
+        <div class="dialog-card">
+            <div id="dialogIcon" class="dialog-icon">⚠️</div>
+            <div id="dialogTitle" class="dialog-title">Dialog Title</div>
+            <div id="dialogMessage" class="dialog-message">Message here...</div>
+            <button id="dialogBtn" class="dialog-btn" onclick="dialogAction()">Action</button>
+        </div>
+    </div>
+
+    <script>
+        // Kirim key ke Java
+        function authenticate() {
+            const key = document.getElementById('keyInput').value.trim();
+            if (typeof AndroidLogin !== 'undefined') {
+                AndroidLogin.authenticate(key);
+            }
+        }
+
+        // Tampilkan dialog (dipanggil dari Java)
+        function showDialog(icon, title, message, btnText) {
+            document.getElementById('dialogIcon').innerHTML = icon || '⚠️';
+            document.getElementById('dialogTitle').innerHTML = title || 'Dialog';
+            document.getElementById('dialogMessage').innerHTML = message || '';
+            document.getElementById('dialogBtn').innerHTML = btnText || 'OK';
+            
+            document.getElementById('dialogOverlay').style.display = 'flex';
+        }
+
+        // Tombol di dialog ditekan
+        function dialogAction() {
+            if (typeof AndroidDialog !== 'undefined') {
+                AndroidDialog.onAction();
+            }
+            hideDialog();
+        }
+
+        function hideDialog() {
+            document.getElementById('dialogOverlay').style.display = 'none';
+        }
+
+        // Tutup dialog kalau klik area gelap
+        document.getElementById('dialogOverlay').addEventListener('click', function(e) {
+            if (e.target.id === 'dialogOverlay') {
+                hideDialog();
+            }
+        });
+    </script>
+</body>
+</html>
